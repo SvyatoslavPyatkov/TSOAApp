@@ -15,8 +15,6 @@ import groupsHasGroupDocumentModel from './groups/groups_has_group_document.mode
 
 import eduProgramModel from './educationPrograms/education_program.model.js';
 
-import recordModel from './record.model.js' //УДАЛИТЬ
-
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     dialect: dbConfig.dialect,
     host: dbConfig.HOST,
@@ -41,8 +39,6 @@ db.groupDocumentTypeModel = groupDocumentTypeModel(sequelize, Sequelize);
 db.groupsHasGroupDocumentModel = groupsHasGroupDocumentModel(sequelize, Sequelize);
 
 db.eduProgramModel = eduProgramModel(sequelize, Sequelize);
-
-db.recordModel = recordModel(sequelize, Sequelize); // УДАЛИТЬ
 
 // Связи отношений базы данных
 

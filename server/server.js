@@ -1,7 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
 import db from './models/index.js';
-import recordRoute from './routers/record.routes.js';
 import routerEduProgram from './routers/educationPrograms/education_program.routes.js';
 import routerGroup from './routers/groups/group.routes.js';
 import routerGroupDocument from './routers/groups/group_document.routes.js';
@@ -28,7 +27,6 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
-recordRoute(app); // УДАЛИТЬ
 routerEduProgram(app);
 routerGroup(app);
 routerGroupDocument(app);
