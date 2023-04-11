@@ -13,23 +13,21 @@ export default function(app) {
     routerGroupsHasGroupDocument.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupsHasGroupDocumentModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            group_id: req.body.group_id,
+            group_document_id: req.body.group_document_id
         })
         .then(res=>{
             const record = {
-                id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                group_id: res.group_id, 
+                group_document_id: res.group_document_id
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerGroupsHasGroupDocument.get('/:id', async function(req, res) {
@@ -40,26 +38,39 @@ export default function(app) {
     routerGroupsHasGroupDocument.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupsHasGroupDocumentModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            group_id: req.body.group_id,
+            group_document_id: req.body.group_document_id
         },{
             where: {
-                id: req.params["id"]
+                group_id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                group_id: res.group_id, 
+                group_document_id: res.group_document_id
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerGroupsHasGroupDocument.delete('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupsHasGroupDocumentModel.destroy({
             where: {
-                id: req.params["id"]
+                group_id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/groups/documents/container', routerGroupsHasGroupDocument);

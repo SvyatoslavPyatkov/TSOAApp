@@ -13,18 +13,12 @@ export default function(app) {
     routerGroupDocumentType.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupDocumentTypeModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            type: req.body.name
         })
         .then(res=>{
             const record = {
                 id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                type: req.name
             }
             console.log(record);
         })
@@ -40,16 +34,24 @@ export default function(app) {
     routerGroupDocumentType.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupDocumentTypeModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            type: req.body.name
         },{
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                id: res.id, 
+                type: req.name
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerGroupDocumentType.delete('/:id', async function(req, res) {
@@ -58,8 +60,12 @@ export default function(app) {
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/groups/documents/types', routerGroupDocumentType);

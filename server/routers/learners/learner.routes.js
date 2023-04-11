@@ -13,23 +13,50 @@ export default function(app) {
     routerLearner.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnerModel.create({
+            surname: req.body.surname,
             name: req.body.name,
+            patronymic: req.body.patronymic,
+            phone: req.body.phone,
+            birth_date: req.body.birth_date,
             email: req.body.email,
             address: req.body.address,
-            gender: req.body.gender
+            employment_place: req.body.employment_place,
+            working_position: req.body.working_position,
+            work_phone: req.body.work_phone,
+            work_record: req.body.work_record,
+            work_record_on_position: req.body.work_record_on_position,
+            SNILS: req.body.SNILS,
+            INN: req.body.INN,
+            gender_id: req.body.gender_id,
+            group_id: req.body.group_id
         })
         .then(res=>{
             const record = {
                 id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                surname: req.surname,
+                name: req.name,
+                patronymic: req.patronymic,
+                phone: req.phone,
+                birth_date: req.birth_date,
+                email: req.email,
+                address: req.address,
+                employment_place: req.employment_place,
+                working_position: req.working_position,
+                work_phone: req.work_phone,
+                work_record: req.work_record,
+                work_record_on_position: req.work_record_on_position,
+                SNILS: req.SNILS,
+                INN: req.INN,
+                gender_id: req.gender_id,
+                group_id: req.group_id
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerLearner.get('/:id', async function(req, res) {
@@ -40,16 +67,54 @@ export default function(app) {
     routerLearner.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnerModel.update({ 
+            surname: req.body.surname,
             name: req.body.name,
+            patronymic: req.body.patronymic,
+            phone: req.body.phone,
+            birth_date: req.body.birth_date,
             email: req.body.email,
             address: req.body.address,
-            gender: req.body.gender
+            employment_place: req.body.employment_place,
+            working_position: req.body.working_position,
+            work_phone: req.body.work_phone,
+            work_record: req.body.work_record,
+            work_record_on_position: req.body.work_record_on_position,
+            SNILS: req.body.SNILS,
+            INN: req.body.INN,
+            gender_id: req.body.gender_id,
+            group_id: req.body.group_id
         },{
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                id: res.id, 
+                surname: req.surname,
+                name: req.name,
+                patronymic: req.patronymic,
+                phone: req.phone,
+                birth_date: req.birth_date,
+                email: req.email,
+                address: req.address,
+                employment_place: req.employment_place,
+                working_position: req.working_position,
+                work_phone: req.work_phone,
+                work_record: req.work_record,
+                work_record_on_position: req.work_record_on_position,
+                SNILS: req.SNILS,
+                INN: req.INN,
+                gender_id: req.gender_id,
+                group_id: req.group_id
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerLearner.delete('/:id', async function(req, res) {
@@ -58,8 +123,12 @@ export default function(app) {
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/learners', routerLearner);

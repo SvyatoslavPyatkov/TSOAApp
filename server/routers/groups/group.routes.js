@@ -13,23 +13,25 @@ export default function(app) {
     routerGroup.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            enrollment_date: req.body.enrollment_date,
+            expulsion_date: req.body.expulsion_date,
+            education_program_id: req.body.education_program_id
         })
         .then(res=>{
             const record = {
                 id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                enrollment_date: req.enrollment_date,
+                expulsion_date: req.expulsion_date,
+                education_program_id: req.education_program_id
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
+        
     });
 
     routerGroup.get('/:id', async function(req, res) {
@@ -40,16 +42,29 @@ export default function(app) {
     routerGroup.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            enrollment_date: req.body.enrollment_date,
+            expulsion_date: req.body.expulsion_date,
+            education_program_id: req.body.education_program_id
         },{
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                id: res.id, 
+                enrollment_date: req.enrollment_date,
+                expulsion_date: req.expulsion_date,
+                education_program_id: req.education_program_id
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
+        
     });
 
     routerGroup.delete('/:id', async function(req, res) {
@@ -58,8 +73,12 @@ export default function(app) {
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/groups', routerGroup);

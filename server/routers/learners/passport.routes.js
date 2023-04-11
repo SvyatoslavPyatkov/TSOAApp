@@ -13,23 +13,27 @@ export default function(app) {
     routerPassport.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.passportModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            passport_number: res.body.passport_number,
+            passport_series: req.body.passport_series,
+            issue_date: req.body.issue_date,
+            issuer: req.body.issuer,
+            learner_id: req.body.learner_id
         })
         .then(res=>{
             const record = {
-                id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                passport_number: res.passport_number,
+                passport_series: req.passport_series,
+                issue_date: req.issue_date,
+                issuer: req.issuer,
+                learner_id: req.learner_id
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerPassport.get('/:id', async function(req, res) {
@@ -40,26 +44,45 @@ export default function(app) {
     routerPassport.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.passportModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            passport_number: res.body.passport_number,
+            passport_series: req.body.passport_series,
+            issue_date: req.body.issue_date,
+            issuer: req.body.issuer,
+            learner_id: req.body.learner_id
         },{
             where: {
-                id: req.params["id"]
+                passport_number: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                passport_number: res.passport_number,
+                passport_series: req.passport_series,
+                issue_date: req.issue_date,
+                issuer: req.issuer,
+                learner_id: req.learner_id
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerPassport.delete('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.passportModel.destroy({
             where: {
-                id: req.params["id"]
+                passport_number: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/learners/passports', routerPassport);

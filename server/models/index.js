@@ -43,29 +43,53 @@ db.eduProgramModel = eduProgramModel(sequelize, Sequelize);
 // Связи отношений базы данных
 
 //learners и passports 1:1
-db.learnerModel.hasOne(db.passportModel, { onDelete: "cascade"});
+db.learnerModel.hasOne(db.passportModel, {
+    foreignKey: 'learner_id'
+})
 
 // genders и learners 1:M
-db.genderModel.hasMany(db.learnerModel, { onDelete: "cascade" });
+db.genderModel.hasMany(db.learnerModel, {
+    foreignKey: 'gender_id'
+})
 
 // learners и learner_documents M:N
-db.learnerModel.belongsToMany(db.learnerDocumentModel, { through: db.learnersHasLearnerDocumentModel });
-db.learnerDocumentModel.belongsToMany(db.learnerModel, { through: db.learnersHasLearnerDocumentModel });
+db.learnerModel.belongsToMany(db.learnerDocumentModel, {
+    through: db.learnersHasLearnerDocumentModel,
+    foreignKey: 'learner_id'
+});
+db.learnerDocumentModel.belongsToMany(db.learnerModel, {
+    through: db.learnersHasLearnerDocumentModel,
+    foreignKey: 'learner_document_id' 
+});
 
-// learner_documents и learner_document_types 1:1
-db.learnerDocumentModel.hasMany(db.learnerDocumentTypeModel, { onDelete: "cascade"});
+// learner_documents и learner_document_types M:1
+db.learnerDocumentTypeModel.hasMany(db.learnerDocumentModel, {
+    foreignKey: 'learner_document_type_id'
+})
 
 // groups и learners 1:M
-db.groupModel.hasMany(db.learnerModel, { onDelete: "cascade" });
+db.groupModel.hasMany(db.learnerModel, {
+    foreignKey: 'group_id'
+})
 
 // groups и group_documents M:N
-db.groupModel.belongsToMany(db.groupDocumentModel, { through: db.groupsHasGroupDocumentModel });
-db.groupDocumentModel.belongsToMany(db.groupModel, { through: db.groupsHasGroupDocumentModel });
+db.groupModel.belongsToMany(db.groupDocumentModel, {
+    through: db.groupsHasGroupDocumentModel,
+    foreignKey: 'group_id'
+});
+db.groupDocumentModel.belongsToMany(db.groupModel, {
+    through: db.groupsHasGroupDocumentModel,
+    foreignKey: 'group_document_id'
+});
 
-// learner_documents и learner_document_types 1:1
-db.groupDocumentModel.hasMany(db.groupDocumentTypeModel, { onDelete: "cascade"});
+// group_documents и group_document_types M:1
+db.groupDocumentTypeModel.hasMany(db.groupDocumentModel, {
+    foreignKey: 'group_document_type_id'
+})
 
 // education_program и groups 1:M
-db.eduProgramModel.hasMany(db.groupModel, { onDelete: "cascade" });
+db.eduProgramModel.hasMany(db.groupModel, {
+    foreignKey: 'education_program_id'
+})
 
 export default db;

@@ -13,23 +13,22 @@ export default function(app) {
     routerEduProgram.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.eduProgramModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            education_program: req.body.education_program,
+            training_duration: req.body.training_duration
         })
         .then(res=>{
             const record = {
                 id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                education_program: req.education_program,
+                training_duration: req.training_duration
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerEduProgram.get('/:id', async function(req, res) {
@@ -40,16 +39,26 @@ export default function(app) {
     routerEduProgram.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.eduProgramModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            education_program: req.body.education_program,
+            training_duration: req.body.training_duration
         },{
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                id: res.id, 
+                education_program: req.education_program,
+                training_duration: req.training_duration
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerEduProgram.delete('/:id', async function(req, res) {
@@ -58,8 +67,12 @@ export default function(app) {
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/education_programs', routerEduProgram);

@@ -14,22 +14,23 @@ export default function(app) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupDocumentModel.create({
             name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            document_path: req.body.document_path,
+            group_document_type_id: req.body.group_document_type_id
         })
         .then(res=>{
             const record = {
                 id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                name: req.name,
+                document_path: req.document_path,
+                group_document_type_id: req.group_document_type_id
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerGroupDocument.get('/:id', async function(req, res) {
@@ -41,15 +42,27 @@ export default function(app) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupDocumentModel.update({ 
             name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            document_path: req.body.document_path,
+            group_document_type_id: req.body.group_document_type_id
         },{
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                id: res.id, 
+                name: req.name,
+                document_path: req.document_path,
+                group_document_type_id: req.group_document_type_id
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerGroupDocument.delete('/:id', async function(req, res) {
@@ -58,8 +71,12 @@ export default function(app) {
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/groups/documents', routerGroupDocument);

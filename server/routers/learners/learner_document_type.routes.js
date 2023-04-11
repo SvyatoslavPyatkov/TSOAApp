@@ -13,23 +13,20 @@ export default function(app) {
     routerLearnerDocumentType.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnerDocumentTypeModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            type: req.body.type
         })
         .then(res=>{
             const record = {
                 id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                type: res.type
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerLearnerDocumentType.get('/:id', async function(req, res) {
@@ -40,16 +37,24 @@ export default function(app) {
     routerLearnerDocumentType.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnerDocumentTypeModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            type: req.body.type
         },{
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                id: res.id, 
+                type: res.type
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerLearnerDocumentType.delete('/:id', async function(req, res) {
@@ -58,8 +63,12 @@ export default function(app) {
             where: {
                 id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/learners/documents/types', routerLearnerDocumentType);

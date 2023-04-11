@@ -2,7 +2,6 @@ export default (sequelize, Sequelize) => {
     const passportModel = sequelize.define("passport", {
         passport_number: {
             type: Sequelize.INTEGER,
-            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },

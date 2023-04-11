@@ -13,23 +13,21 @@ export default function(app) {
     routerLearnersHasLearnerDocument.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnersHasLearnerDocumentModel.create({
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            learner_id: req.body.learner_id,
+            learner_document_id: req.body.learner_document_id
         })
         .then(res=>{
             const record = {
-                id: res.id, 
-                name: res.name, 
-                email: res.email,
-                address: res.address,
-                gender: res.gender
+                learner_id: res.learner_id, 
+                learner_document_id: res.learner_document_id
             }
             console.log(record);
+            res.json({state: 'success'});
         })
-        .catch(err=>console.log(err));
-        res.json({state: 'success'});
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerLearnersHasLearnerDocument.get('/:id', async function(req, res) {
@@ -40,26 +38,39 @@ export default function(app) {
     routerLearnersHasLearnerDocument.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnersHasLearnerDocumentModel.update({ 
-            name: req.body.name,
-            email: req.body.email,
-            address: req.body.address,
-            gender: req.body.gender
+            learner_id: req.body.learner_id,
+            learner_document_id: req.body.learner_document_id
         },{
             where: {
-                id: req.params["id"]
+                learner_id: req.params["id"]
             }
+        })
+        .then(res=>{
+            const record = {
+                learner_id: res.learner_id, 
+                learner_document_id: res.learner_document_id
+            }
+            console.log(record);
+            res.json({state: 'updated'});
+        })
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'edit error'});
         });
-        res.json({state: 'updated'});
     });
 
     routerLearnersHasLearnerDocument.delete('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.learnersHasLearnerDocumentModel.destroy({
             where: {
-                id: req.params["id"]
+                learner_id: req.params["id"]
             }
+        })
+        .then(res=>res.json({state: 'deleted'}))
+        .catch(err=>{
+            console.log(err);
+            res.json({state: 'delete error'});
         });
-        res.json({state: 'deleted'});
     });
     
     app.use('/api/learners/documents/container', routerLearnersHasLearnerDocument);
