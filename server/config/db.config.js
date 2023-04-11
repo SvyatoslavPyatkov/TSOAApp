@@ -2,7 +2,7 @@ const dbConfig = {
     HOST: "localhost",
     USER: "root",
     PASSWORD: "root",
-    DB: "mevn-course",
+    DB: "db_learner_records",
     dialect: "mysql",
     define: {
         timestamps: false
