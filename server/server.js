@@ -39,7 +39,7 @@ routerLearnerDocument(app);
 routerLearnerDocumentType(app);
 routerLearnersHasLearnerDocument(app);
 
-db.sequelize.sync().then(()=>{
+db.sequelize.sync({force: true}).then(()=>{
     app.listen(app.get('port'), () => {
         console.log(`[OK] Сервер работает на localhost: ${app.get('port')}`);
     });
