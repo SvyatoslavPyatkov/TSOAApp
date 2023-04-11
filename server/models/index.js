@@ -41,8 +41,35 @@ db.groupDocumentTypeModel = groupDocumentTypeModel(sequelize, Sequelize);
 db.groupsHasGroupDocumentModel = groupsHasGroupDocumentModel(sequelize, Sequelize);
 
 db.eduProgramModel = eduProgramModel(sequelize, Sequelize);
-db.learnerModel = learnerModel(sequelize, Sequelize);
 
 db.recordModel = recordModel(sequelize, Sequelize); // УДАЛИТЬ
+
+// Связи отношений базы данных
+
+//learners и passports 1:1
+db.learnerModel.hasOne(db.passportModel, { onDelete: "cascade"});
+
+// genders и learners 1:M
+db.genderModel.hasMany(db.learnerModel, { onDelete: "cascade" });
+
+// learners и learner_documents M:N
+db.learnerModel.belongsToMany(db.learnerDocumentModel, { through: db.learnersHasLearnerDocumentModel });
+db.learnerDocumentModel.belongsToMany(db.learnerModel, { through: db.learnersHasLearnerDocumentModel });
+
+// learner_documents и learner_document_types 1:1
+db.learnerDocumentModel.hasMany(db.learnerDocumentTypeModel, { onDelete: "cascade"});
+
+// groups и learners 1:M
+db.groupModel.hasMany(db.learnerModel, { onDelete: "cascade" });
+
+// groups и group_documents M:N
+db.groupModel.belongsToMany(db.groupDocumentModel, { through: db.groupsHasGroupDocumentModel });
+db.groupDocumentModel.belongsToMany(db.groupModel, { through: db.groupsHasGroupDocumentModel });
+
+// learner_documents и learner_document_types 1:1
+db.groupDocumentModel.hasMany(db.groupDocumentTypeModel, { onDelete: "cascade"});
+
+// education_program и groups 1:M
+db.eduProgramModel.hasMany(db.groupModel, { onDelete: "cascade" });
 
 export default db;

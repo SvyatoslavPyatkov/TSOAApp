@@ -1,7 +1,3 @@
-import db from '../index.js';
-const learnersHasLearnerDocumentModel = db.learnersHasLearnerDocumentModel;
-const passportModel = db.passportModel;
-
 export default (sequelize, Sequelize) => {
     const learnerModel = sequelize.define("learner", {
         id: {
@@ -67,8 +63,6 @@ export default (sequelize, Sequelize) => {
             allowNull: true
         }
     });
-    learnerModel.hasMany(learnersHasLearnerDocumentModel, { onDelete: "cascade" });
-    learnerModel.hasOne(passportModel, { onDelete: "cascade"});
     
     return learnerModel;
 };
