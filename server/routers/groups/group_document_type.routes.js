@@ -13,15 +13,9 @@ export default function(app) {
     routerGroupDocumentType.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupDocumentTypeModel.create({
-            type: req.body.name
+            type: req.body.type
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                type: req.name
-            }
-            console.log(record);
-        })
+        .then(res.json({state: 'success'}))
         .catch(err=>console.log(err));
         res.json({state: 'success'});
     });
@@ -34,20 +28,13 @@ export default function(app) {
     routerGroupDocumentType.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*')
         await db.groupDocumentTypeModel.update({ 
-            type: req.body.name
+            type: req.body.type
         },{
             where: {
                 id: req.params["id"]
             }
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                type: req.name
-            }
-            console.log(record);
-            res.json({state: 'updated'});
-        })
+        .then(res.json({state: 'updated'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'edit error'});
@@ -61,7 +48,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>res.json({state: 'deleted'}))
+        .then(res.json({state: 'deleted'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'delete error'});

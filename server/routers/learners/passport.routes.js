@@ -19,17 +19,7 @@ export default function(app) {
             issuer: req.body.issuer,
             learner_id: req.body.learner_id
         })
-        .then(res=>{
-            const record = {
-                passport_number: res.passport_number,
-                passport_series: req.passport_series,
-                issue_date: req.issue_date,
-                issuer: req.issuer,
-                learner_id: req.learner_id
-            }
-            console.log(record);
-            res.json({state: 'success'});
-        })
+        .then(res.json({state: 'success'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'recording error'})
@@ -54,17 +44,7 @@ export default function(app) {
                 passport_number: req.params["id"]
             }
         })
-        .then(res=>{
-            const record = {
-                passport_number: res.passport_number,
-                passport_series: req.passport_series,
-                issue_date: req.issue_date,
-                issuer: req.issuer,
-                learner_id: req.learner_id
-            }
-            console.log(record);
-            res.json({state: 'updated'});
-        })
+        .then(res.json({state: 'updated'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'edit error'});
@@ -78,7 +58,7 @@ export default function(app) {
                 passport_number: req.params["id"]
             }
         })
-        .then(res=>res.json({state: 'deleted'}))
+        .then(res.json({state: 'deleted'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'delete error'});

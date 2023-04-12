@@ -17,16 +17,7 @@ export default function(app) {
             document_path: req.body.email,
             learner_document_type_id: req.body.learner_document_type_id
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                name: req.name,
-                document_path: req.email,
-                learner_document_type_id: req.learner_document_type_id
-            }
-            console.log(record);
-            res.json({state: 'success'});
-        })
+        .then(res.json({state: 'success'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'recording error'})
@@ -49,16 +40,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                name: req.name,
-                document_path: req.email,
-                learner_document_type_id: req.learner_document_type_id
-            }
-            console.log(record);
-            res.json({state: 'updated'});
-        })
+        .then(res.json({state: 'updated'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'edit error'});
@@ -72,7 +54,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>res.json({state: 'deleted'}))
+        .then(res.json({state: 'deleted'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'delete error'});

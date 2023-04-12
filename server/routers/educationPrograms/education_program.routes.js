@@ -16,15 +16,7 @@ export default function(app) {
             education_program: req.body.education_program,
             training_duration: req.body.training_duration
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                education_program: req.education_program,
-                training_duration: req.training_duration
-            }
-            console.log(record);
-            res.json({state: 'success'});
-        })
+        .then(res.json({state: 'success'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'recording error'})
@@ -46,15 +38,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                education_program: req.education_program,
-                training_duration: req.training_duration
-            }
-            console.log(record);
-            res.json({state: 'updated'});
-        })
+        .then(res.json({state: 'updated'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'edit error'});
@@ -68,7 +52,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>res.json({state: 'deleted'}))
+        .then(res.json({state: 'deleted'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'delete error'});

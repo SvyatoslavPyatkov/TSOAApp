@@ -39,9 +39,8 @@ routerLearnerDocument(app);
 routerLearnerDocumentType(app);
 routerLearnersHasLearnerDocument(app);
 
-const forceBool = false; // Включить пересоздание таблиц
-
-db.sequelize.sync({force: forceBool}).then(()=>{
+// forceBool = true - включить пересоздание таблиц, пустой аргумент - false
+db.sequelize.sync({force: Boolean(process.argv[2])}).then(()=>{
     app.listen(app.get('port'), () => {
         console.log(`[OK] Сервер работает на localhost: ${app.get('port')}`);
     });

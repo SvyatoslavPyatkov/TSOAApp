@@ -15,14 +15,7 @@ export default function(app) {
         await db.genderModel.create({
             gender: req.body.gender
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                gender: res.gender
-            }
-            console.log(record);
-            res.json({state: 'success'});
-        })
+        .then(res.json({state: 'success'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'recording error'})
@@ -43,14 +36,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                gender: res.gender
-            }
-            console.log(record);
-            res.json({state: 'updated'});
-        })
+        .then(res.json({state: 'updated'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'edit error'});
@@ -64,7 +50,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>res.json({state: 'deleted'}))
+        .then(res.json({state: 'deleted'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'delete error'});

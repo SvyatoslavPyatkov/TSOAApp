@@ -30,29 +30,7 @@ export default function(app) {
             gender_id: req.body.gender_id,
             group_id: req.body.group_id
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                surname: req.surname,
-                name: req.name,
-                patronymic: req.patronymic,
-                phone: req.phone,
-                birth_date: req.birth_date,
-                email: req.email,
-                address: req.address,
-                employment_place: req.employment_place,
-                working_position: req.working_position,
-                work_phone: req.work_phone,
-                work_record: req.work_record,
-                work_record_on_position: req.work_record_on_position,
-                SNILS: req.SNILS,
-                INN: req.INN,
-                gender_id: req.gender_id,
-                group_id: req.group_id
-            }
-            console.log(record);
-            res.json({state: 'success'});
-        })
+        .then(res.json({state: 'success'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'recording error'})
@@ -88,29 +66,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>{
-            const record = {
-                id: res.id, 
-                surname: req.surname,
-                name: req.name,
-                patronymic: req.patronymic,
-                phone: req.phone,
-                birth_date: req.birth_date,
-                email: req.email,
-                address: req.address,
-                employment_place: req.employment_place,
-                working_position: req.working_position,
-                work_phone: req.work_phone,
-                work_record: req.work_record,
-                work_record_on_position: req.work_record_on_position,
-                SNILS: req.SNILS,
-                INN: req.INN,
-                gender_id: req.gender_id,
-                group_id: req.group_id
-            }
-            console.log(record);
-            res.json({state: 'updated'});
-        })
+        .then(res.json({state: 'updated'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'edit error'});
@@ -124,7 +80,7 @@ export default function(app) {
                 id: req.params["id"]
             }
         })
-        .then(res=>res.json({state: 'deleted'}))
+        .then(res.json({state: 'deleted'}))
         .catch(err=>{
             console.log(err);
             res.json({state: 'delete error'});
