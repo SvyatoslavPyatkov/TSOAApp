@@ -59,5 +59,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/learners/documents/container', routerLearnersHasLearnerDocument);
+    app.use('/api/learnersdoccontainers', routerLearnersHasLearnerDocument);
 };

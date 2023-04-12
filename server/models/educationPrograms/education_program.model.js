@@ -5,6 +5,7 @@ export default (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true,
             allowNull: false
+            
         },
         education_program: {
             type: Sequelize.STRING,

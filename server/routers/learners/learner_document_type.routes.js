@@ -57,5 +57,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/learners/documents/types', routerLearnerDocumentType);
+    app.use('/api/learnersdoctypes', routerLearnerDocumentType);
 };

@@ -72,7 +72,7 @@ db.groupModel.hasMany(db.learnerModel, {
     foreignKey: 'group_id'
 })
 
-// groups и group_documents M:N
+// groups и group_documents супер M:N
 db.groupModel.belongsToMany(db.groupDocumentModel, {
     through: db.groupsHasGroupDocumentModel,
     foreignKey: 'group_id'
@@ -81,6 +81,10 @@ db.groupDocumentModel.belongsToMany(db.groupModel, {
     through: db.groupsHasGroupDocumentModel,
     foreignKey: 'group_document_id'
 });
+db.groupModel.hasMany(db.groupsHasGroupDocumentModel);
+db.groupsHasGroupDocumentModel.belongsTo(db.groupModel);
+db.groupDocumentModel.hasMany(db.groupsHasGroupDocumentModel);
+db.groupsHasGroupDocumentModel.belongsTo(db.groupDocumentModel);
 
 // group_documents и group_document_types M:1
 db.groupDocumentTypeModel.hasMany(db.groupDocumentModel, {

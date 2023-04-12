@@ -57,5 +57,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/learners/genders', routerGender);
+    app.use('/api/learnersgender', routerGender);
 };

@@ -61,5 +61,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/groups/documents', routerGroupDocument);
+    app.use('/api/groupsdocs', routerGroupDocument);
 };

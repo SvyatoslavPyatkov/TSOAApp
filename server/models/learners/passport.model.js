@@ -3,7 +3,8 @@ export default (sequelize, Sequelize) => {
         passport_number: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         passport_series: {
             type: Sequelize.INTEGER,

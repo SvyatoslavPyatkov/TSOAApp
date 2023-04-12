@@ -65,5 +65,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/learners/passports', routerPassport);
+    app.use('/api/learnerspassport', routerPassport);
 };

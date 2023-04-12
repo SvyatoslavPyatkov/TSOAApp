@@ -59,5 +59,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/groups/documents/container', routerGroupsHasGroupDocument);
+    app.use('/api/groupsdoccontainer', routerGroupsHasGroupDocument);
 };

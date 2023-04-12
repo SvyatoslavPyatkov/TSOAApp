@@ -17,7 +17,6 @@ export default function(app) {
         })
         .then(res.json({state: 'success'}))
         .catch(err=>console.log(err));
-        res.json({state: 'success'});
     });
 
     routerGroupDocumentType.get('/:id', async function(req, res) {
@@ -55,5 +54,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/groups/documents/types', routerGroupDocumentType);
+    app.use('/api/groupsdoctypes', routerGroupDocumentType);
 };

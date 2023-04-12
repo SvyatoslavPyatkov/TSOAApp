@@ -61,5 +61,5 @@ export default function(app) {
         });
     });
     
-    app.use('/api/learners/documents', routerLearnerDocument);
+    app.use('/api/learnersdocs', routerLearnerDocument);
 };
