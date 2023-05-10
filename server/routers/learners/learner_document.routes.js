@@ -6,59 +6,71 @@ export default function(app) {
     const routerLearnerDocument = express.Router();
 
     routerLearnerDocument.get('/', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
+        res.set('Access-Control-Allow-Origin', '*');
         res.json(await db.learnerDocumentModel.findAll({raw: true}));
     });
         
     routerLearnerDocument.post('/', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        await db.learnerDocumentModel.create({
-            name: req.body.name,
-            document_path: req.body.email,
-            learner_document_type_id: req.body.learner_document_type_id
-        })
-        .then(res.json({state: 'success'}))
-        .catch(err=>{
-            console.log(err);
-            res.json({state: 'recording error'})
-        });
+        res.set('Access-Control-Allow-Origin', '*');
+        (async function() {
+            try {
+                await db.learnerDocumentModel.create({
+                    name: req.body.name,
+                    document_path: req.body.email,
+                    learner_document_type_id: req.body.learner_document_type_id
+                });
+                res.json({state: 'success'});
+            } 
+            catch (err) {
+                console.log(err);
+                res.json({state: 'recording error'});
+            }
+        })();
     });
 
     routerLearnerDocument.get('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
+        res.set('Access-Control-Allow-Origin', '*');
         res.json(await db.learnerDocumentModel.findByPk(req.params["id"]));
     });
 
     routerLearnerDocument.put('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        await db.learnerDocumentModel.update({ 
-            name: req.body.name,
-            document_path: req.body.email,
-            learner_document_type_id: req.body.learner_document_type_id
-        },{
-            where: {
-                id: req.params["id"]
+        res.set('Access-Control-Allow-Origin', '*');
+        (async function() {
+            try {
+                await db.learnerDocumentModel.update({ 
+                    name: req.body.name,
+                    document_path: req.body.email,
+                    learner_document_type_id: req.body.learner_document_type_id
+                },{
+                    where: {
+                        id: req.params["id"]
+                    }
+                });
+                res.json({state: 'updated'});
+            } 
+            catch (err) {
+                console.log(err);
+                res.json({state: 'edit error'});
             }
-        })
-        .then(res.json({state: 'updated'}))
-        .catch(err=>{
-            console.log(err);
-            res.json({state: 'edit error'});
-        });
+        })();
     });
 
     routerLearnerDocument.delete('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        await db.learnerDocumentModel.destroy({
-            where: {
-                id: req.params["id"]
+        res.set('Access-Control-Allow-Origin', '*');
+        (async function() {
+            try {
+                await db.learnerDocumentModel.destroy({
+                    where: {
+                        id: req.params["id"]
+                    }
+                });
+                res.json({state: 'deleted'});
+            } 
+            catch (err) {
+                console.log(err);
+                res.json({state: 'delete error'});
             }
-        })
-        .then(res.json({state: 'deleted'}))
-        .catch(err=>{
-            console.log(err);
-            res.json({state: 'delete error'});
-        });
+        })();
     });
     
     app.use('/api/learnersdocs', routerLearnerDocument);

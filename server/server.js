@@ -12,6 +12,8 @@ import routerPassport from './routers/learners/passport.routes.js';
 import routerLearnerDocument from './routers/learners/learner_document.routes.js';
 import routerLearnerDocumentType from './routers/learners/learner_document_type.routes.js';
 import routerLearnersHasLearnerDocument from './routers/learners/learners_has_learner_document.routes.js';
+import routerCompetence from './routers/educationPrograms/competence.routes.js';
+import routerDiscipline from './routers/educationPrograms/discipline.routes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -38,6 +40,8 @@ routerPassport(app);
 routerLearnerDocument(app);
 routerLearnerDocumentType(app);
 routerLearnersHasLearnerDocument(app);
+routerCompetence(app);
+routerDiscipline(app);
 
 // forceBool = true - включить пересоздание таблиц, пустой аргумент - false
 db.sequelize.sync({force: Boolean(process.argv[2])}).then(()=>{

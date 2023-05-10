@@ -11,15 +11,19 @@ export default function(app) {
     });
         
     routerLearnerDocumentType.post('/', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        await db.learnerDocumentTypeModel.create({
-            type: req.body.type
-        })
-        .then(res.json({state: 'success'}))
-        .catch(err=>{
-            console.log(err);
-            res.json({state: 'recording error'})
-        });
+        res.set('Access-Control-Allow-Origin', '*');
+        (async function() {
+            try {
+                await db.learnerDocumentTypeModel.create({
+                    type: req.body.type
+                });
+                res.json({state: 'success'});
+            } 
+            catch (err) {
+                console.log(err);
+                res.json({state: 'recording error'});
+            }
+        })();
     });
 
     routerLearnerDocumentType.get('/:id', async function(req, res) {
@@ -28,33 +32,41 @@ export default function(app) {
     });
 
     routerLearnerDocumentType.put('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        await db.learnerDocumentTypeModel.update({ 
-            type: req.body.type
-        },{
-            where: {
-                id: req.params["id"]
+        res.set('Access-Control-Allow-Origin', '*');
+        (async function() {
+            try {
+                await db.learnerDocumentTypeModel.update({ 
+                    type: req.body.type
+                },{
+                    where: {
+                        id: req.params["id"]
+                    }
+                });
+                res.json({state: 'updated'});
+            } 
+            catch (err) {
+                console.log(err);
+                res.json({state: 'edit error'});
             }
-        })
-        .then(res.json({state: 'updated'}))
-        .catch(err=>{
-            console.log(err);
-            res.json({state: 'edit error'});
-        });
+        })();
     });
 
     routerLearnerDocumentType.delete('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        await db.learnerDocumentTypeModel.destroy({
-            where: {
-                id: req.params["id"]
+        res.set('Access-Control-Allow-Origin', '*');
+        (async function() {
+            try {
+                await db.learnerDocumentTypeModel.destroy({
+                    where: {
+                        id: req.params["id"]
+                    }
+                });
+                res.json({state: 'deleted'});
+            } 
+            catch (err) {
+                console.log(err);
+                res.json({state: 'delete error'});
             }
-        })
-        .then(res.json({state: 'deleted'}))
-        .catch(err=>{
-            console.log(err);
-            res.json({state: 'delete error'});
-        });
+        })();
     });
     
     app.use('/api/learnersdoctypes', routerLearnerDocumentType);

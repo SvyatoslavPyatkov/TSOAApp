@@ -14,6 +14,9 @@ import groupDocumentTypeModel from './groups/group_document_type.model.js';
 import groupsHasGroupDocumentModel from './groups/groups_has_group_document.model.js';
 
 import eduProgramModel from './educationPrograms/education_program.model.js';
+import competenceModel from './educationPrograms/competence.model.js';
+import disciplineModel from './educationPrograms/discipline.model.js';
+
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     dialect: dbConfig.dialect,
@@ -39,6 +42,8 @@ db.groupDocumentTypeModel = groupDocumentTypeModel(sequelize, Sequelize);
 db.groupsHasGroupDocumentModel = groupsHasGroupDocumentModel(sequelize, Sequelize);
 
 db.eduProgramModel = eduProgramModel(sequelize, Sequelize);
+db.competenceModel = competenceModel(sequelize, Sequelize);
+db.disciplineModel = disciplineModel(sequelize, Sequelize);
 
 // Связи отношений базы данных
 
@@ -81,19 +86,25 @@ db.groupDocumentModel.belongsToMany(db.groupModel, {
     through: db.groupsHasGroupDocumentModel,
     foreignKey: 'group_document_id'
 });
-db.groupModel.hasMany(db.groupsHasGroupDocumentModel);
-db.groupsHasGroupDocumentModel.belongsTo(db.groupModel);
-db.groupDocumentModel.hasMany(db.groupsHasGroupDocumentModel);
-db.groupsHasGroupDocumentModel.belongsTo(db.groupDocumentModel);
 
 // group_documents и group_document_types M:1
 db.groupDocumentTypeModel.hasMany(db.groupDocumentModel, {
     foreignKey: 'group_document_type_id'
-})
+});
 
-// education_program и groups 1:M
+// education_programs и groups 1:M
 db.eduProgramModel.hasMany(db.groupModel, {
     foreignKey: 'education_program_id'
-})
+});
+
+// education_programs и competencies 1:M
+db.eduProgramModel.hasMany(db.competenceModel, {
+    foreignKey: 'education_program_id'
+});
+
+// education_programs и disciplines 1:M
+db.eduProgramModel.hasMany(db.disciplineModel, {
+    foreignKey: 'education_program_id'
+});
 
 export default db;

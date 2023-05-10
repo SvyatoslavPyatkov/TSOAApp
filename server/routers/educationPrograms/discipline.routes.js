@@ -3,19 +3,20 @@ import db from '../../models/index.js';
 
 export default function(app) {
     
-    const routerGroupDocumentType = express.Router();
+    const routerDiscipline = express.Router();
 
-    routerGroupDocumentType.get('/', async function(req, res) {
+    routerDiscipline.get('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
-        res.json(await db.groupDocumentTypeModel.findAll({raw: true}));
+        res.json(await db.disciplineModel.findAll({raw: true}));
     });
         
-    routerGroupDocumentType.post('/', async function(req, res) {
+    routerDiscipline.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         (async function() {
             try {
-                await db.groupDocumentTypeModel.create({
-                    type: req.body.type
+                await db.disciplineModel.create({
+                    discipline: req.body.discipline,
+                    education_program_id: req.body.education_program_id
                 });
                 res.json({state: 'success'});
             } 
@@ -26,17 +27,18 @@ export default function(app) {
         })();
     });
 
-    routerGroupDocumentType.get('/:id', async function(req, res) {
+    routerDiscipline.get('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
-        res.json(await db.groupDocumentTypeModel.findByPk(req.params["id"]));
+        res.json(await db.disciplineModel.findByPk(req.params["id"]));
     });
 
-    routerGroupDocumentType.put('/:id', async function(req, res) {
+    routerDiscipline.put('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         (async function() {
             try {
-                await db.groupDocumentTypeModel.update({ 
-                    type: req.body.type
+                await db.disciplineModel.update({ 
+                    discipline: req.body.discipline,
+                    education_program_id: req.body.education_program_id
                 },{
                     where: {
                         id: req.params["id"]
@@ -51,11 +53,11 @@ export default function(app) {
         })();
     });
 
-    routerGroupDocumentType.delete('/:id', async function(req, res) {
+    routerDiscipline.delete('/:id', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         (async function() {
             try {
-                await db.groupDocumentTypeModel.destroy({
+                await db.disciplineModel.destroy({
                     where: {
                         id: req.params["id"]
                     }
@@ -69,5 +71,5 @@ export default function(app) {
         })();
     });
     
-    app.use('/api/groupsdoctypes', routerGroupDocumentType);
+    app.use('/api/disciplines', routerDiscipline);
 };

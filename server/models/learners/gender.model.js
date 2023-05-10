@@ -4,11 +4,13 @@ export default (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         gender: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         }
     });
     

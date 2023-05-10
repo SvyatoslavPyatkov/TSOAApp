@@ -1,5 +1,5 @@
 export default (sequelize, Sequelize) => {
-    const eduProgramModel = sequelize.define("education_program", {
+    const competenceModel = sequelize.define("competence", {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
@@ -7,16 +7,15 @@ export default (sequelize, Sequelize) => {
             allowNull: false
             
         },
-        education_program: {
+        competence: {
             type: Sequelize.STRING,
             allowNull: false,
             unique: true
-        },
-        training_duration: {
-            type: Sequelize.STRING,
-            allowNull: false
         }
+    }, {
+        tableName: 'competencies'
     });
     
-    return eduProgramModel;
+    return competenceModel;
 };
+
