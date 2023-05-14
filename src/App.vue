@@ -23,8 +23,3 @@
         name: "app"
     };
 </script>
-
-
-<style>
-    
-</style>

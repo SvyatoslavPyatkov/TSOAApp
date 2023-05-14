@@ -10,12 +10,12 @@ const routes =  [
     {
         path: "/api/education_programs/:id",
         name: "EduProgram-details",
-        component: () => import("./components/EduProgram")
+        component: () => import("./components/EduProgram.vue")
     },
     {
         path: "/api/education_programs/add",
         name: "AddEduProgram",
-        component: () => import("./components/")
+        component: () => import("./components/AddEduProgram.vue")
     }
 ];
 

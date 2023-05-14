@@ -54,7 +54,7 @@
   </template>
   
 <script>
-    import EduProgramsDataService from "../../services/EduProgramsDataService.js";
+    import EduProgramsDataService from "../services/EduProgramsDataService.js";
     
     export default {
         name: "EduProgRecord",
