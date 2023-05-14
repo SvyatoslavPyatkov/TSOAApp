@@ -12,40 +12,34 @@ export default function(app) {
         
     routerGroup.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
-        (async function() {
-            try {
-                let record = { group_id: null, group_document_id: null };
-                let out; console.log(out);
-
-                await db.groupModel.create({
-                    enrollment_date: req.body.enrollment_date,
-                    expulsion_date: req.body.expulsion_date,
-                    education_program_id: req.body.education_program_id
-                }).then(res=>{
-                    record = {
-                        group_id: res.id
-                    }
-                }).then(await db.groupDocumentModel.create({
-                    name: req.body.name,
-                    document_path: req.body.document_path,
-                    group_document_type_id: req.body.group_document_type_id
-                }).then(res=>{
-                    record = {
-                        group_document_id: res.id
-                    }
-                    console.log(record)
-                }).then(db.groupsHasGroupDocumentModel.create({
-                    group_id: record.group_id,    
-                    group_document_id:  record.group_document_id
-                    })
-                ));
-                res.json({state: 'success'});
-            } 
-            catch (err) {
-                console.log(err);
-                res.json({state: 'recording error'});
+        let record = { group_id: null, group_document_id: null }
+        let out; console.log(out)
+        await db.groupModel.create({
+            enrollment_date: req.body.enrollment_date,
+            expulsion_date: req.body.expulsion_date,
+            education_program_id: req.body.education_program_id
+        }).then(res=>{
+            record = {
+                group_id: res.id
             }
-        })();
+        }).then(await db.groupDocumentModel.create({
+            name: req.body.name,
+            document_path: req.body.document_path,
+            group_document_type_id: req.body.group_document_type_id
+        }).then(res=>{
+            record = {
+                group_document_id: res.id
+            }
+            console.log(record)
+        }).then(db.groupsHasGroupDocumentModel.create({
+            group_id: record.group_id,    
+            group_document_id:  record.group_document_id
+            })
+        ).then(res.json({state: 'success'}))
+        ).catch(err=>{
+            console.log(err);
+            res.json({state: 'recording error'})
+        });
     });
 
     routerGroup.get('/:id', async function(req, res) {
