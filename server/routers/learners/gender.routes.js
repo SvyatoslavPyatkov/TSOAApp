@@ -9,7 +9,7 @@ export default function(app) {
         res.set('Access-Control-Allow-Origin', '*')
         res.json(await db.genderModel.findAll({raw: true}));
     });
-        
+
     routerGender.post('/', async function(req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         (async function() {

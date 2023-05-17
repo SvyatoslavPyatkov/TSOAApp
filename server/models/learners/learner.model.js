@@ -1,30 +1,14 @@
 export default (sequelize, Sequelize) => {
     const learnerModel = sequelize.define("learner", {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false
         },
-        surname: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        name: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        patronymic: {
+        phone_number: {
             type: Sequelize.STRING,
             allowNull: true
-        },
-        phone: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        birth_date: {
-            type: Sequelize.DATEONLY,
-            allowNull: false
         },
         email: {
             type: Sequelize.STRING,
@@ -33,26 +17,6 @@ export default (sequelize, Sequelize) => {
         address: {
             type: Sequelize.STRING,
             allowNull: false
-        },
-        employment_place: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        working_position: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        work_phone: {
-            type: Sequelize.STRING,
-            allowNull: true
-        },
-        work_record: {
-            type: Sequelize.STRING,
-            allowNull: true
-        },
-        work_record_on_position: {
-            type: Sequelize.STRING,
-            allowNull: true
         },
         SNILS: {
             type: Sequelize.STRING,

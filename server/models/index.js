@@ -2,20 +2,20 @@ import Sequelize from 'sequelize';
 import dbConfig from '../config/db.config.js';
 
 import learnerModel from './learners/learner.model.js';
-import genderModel from './learners/gender.model.js';
 import passportModel from './learners/passport.model.js';
-import learnerDocumentModel from './learners/learner_document.model.js';
-import learnerDocumentTypeModel from './learners/learner_document_type.model.js';
-import learnersHasLearnerDocumentModel from './learners/learners_has_learner_document.model.js';
+import jobModel from './learners/job.model.js';
+import learnerFileModel from './learners/learner_file.model.js';
 
 import groupModel from './groups/group.model.js';
-import groupDocumentModel from './groups/group_document.model.js';
-import groupDocumentTypeModel from './groups/group_document_type.model.js';
-import groupsHasGroupDocumentModel from './groups/groups_has_group_document.model.js';
+import groupFileModel from './groups/group_file.model.js';
 
 import eduProgramModel from './educationPrograms/education_program.model.js';
-import competenceModel from './educationPrograms/competence.model.js';
-import disciplineModel from './educationPrograms/discipline.model.js';
+import eduFormModel from './educationPrograms/education_form.model.js';
+
+import fileModel from './files/file.model.js';
+import fileTypeModel from './files/file_type.model.js';
+
+import userModel from './authorization/user.model.js';
 
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
@@ -30,81 +30,77 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.learnerModel = learnerModel(sequelize, Sequelize);
-db.genderModel = genderModel(sequelize, Sequelize);
 db.passportModel = passportModel(sequelize, Sequelize);
-db.learnerDocumentModel = learnerDocumentModel(sequelize, Sequelize);
-db.learnerDocumentTypeModel = learnerDocumentTypeModel(sequelize, Sequelize);
-db.learnersHasLearnerDocumentModel = learnersHasLearnerDocumentModel(sequelize, Sequelize);
+db.jobModel = jobModel(sequelize, Sequelize);
+db.learnerFileModel = learnerFileModel(sequelize, Sequelize);
 
 db.groupModel = groupModel(sequelize, Sequelize);
-db.groupDocumentModel = groupDocumentModel(sequelize, Sequelize);
-db.groupDocumentTypeModel = groupDocumentTypeModel(sequelize, Sequelize);
-db.groupsHasGroupDocumentModel = groupsHasGroupDocumentModel(sequelize, Sequelize);
+db.groupFileModel = groupFileModel(sequelize, Sequelize);
 
 db.eduProgramModel = eduProgramModel(sequelize, Sequelize);
-db.competenceModel = competenceModel(sequelize, Sequelize);
-db.disciplineModel = disciplineModel(sequelize, Sequelize);
+db.eduFormModel = eduFormModel(sequelize, Sequelize);
+
+db.fileModel = fileModel(sequelize, Sequelize);
+db.fileTypeModel = fileTypeModel(sequelize, Sequelize);
+
+db.userModel = userModel(sequelize, Sequelize);
+
 
 // Связи отношений базы данных
 
-//learners и passports 1:1
-db.learnerModel.hasOne(db.passportModel, {
-    foreignKey: 'learner_id'
+//passports и learners 1:M
+db.passportModel.hasMany(db.learnerModel, {
+    foreignKey: 'passport_id'
 })
 
-// genders и learners 1:M
-db.genderModel.hasMany(db.learnerModel, {
-    foreignKey: 'gender_id'
+//jobs и learners 1:M
+db.jobModel.hasMany(db.learnerModel, {
+    foreignKey: 'job_id'
 })
 
-// learners и learner_documents M:N
-db.learnerModel.belongsToMany(db.learnerDocumentModel, {
-    through: db.learnersHasLearnerDocumentModel,
+// learners и files M:N
+db.learnerModel.belongsToMany(db.fileModel, {
+    through: db.learnerFileModel,
     foreignKey: 'learner_id'
 });
-db.learnerDocumentModel.belongsToMany(db.learnerModel, {
-    through: db.learnersHasLearnerDocumentModel,
-    foreignKey: 'learner_document_id' 
+db.fileModel.belongsToMany(db.learnerModel, {
+    through: db.learnerFileModel,
+    foreignKey: 'file_id' 
 });
-
-// learner_documents и learner_document_types M:1
-db.learnerDocumentTypeModel.hasMany(db.learnerDocumentModel, {
-    foreignKey: 'learner_document_type_id'
-})
 
 // groups и learners 1:M
 db.groupModel.hasMany(db.learnerModel, {
     foreignKey: 'group_id'
 })
 
-// groups и group_documents супер M:N
-db.groupModel.belongsToMany(db.groupDocumentModel, {
-    through: db.groupsHasGroupDocumentModel,
-    foreignKey: 'group_id'
-});
-db.groupDocumentModel.belongsToMany(db.groupModel, {
-    through: db.groupsHasGroupDocumentModel,
-    foreignKey: 'group_document_id'
-});
-
-// group_documents и group_document_types M:1
-db.groupDocumentTypeModel.hasMany(db.groupDocumentModel, {
-    foreignKey: 'group_document_type_id'
-});
-
 // education_programs и groups 1:M
 db.eduProgramModel.hasMany(db.groupModel, {
     foreignKey: 'education_program_id'
 });
 
-// education_programs и competencies 1:M
-db.eduProgramModel.hasMany(db.competenceModel, {
-    foreignKey: 'education_program_id'
+// education_forms и groups 1:M
+db.eduFormModel.hasMany(db.eduProgramModel, {
+    foreignKey: 'education_form_id'
 });
 
-// education_programs и disciplines 1:M
-db.eduProgramModel.hasMany(db.disciplineModel, {
-    foreignKey: 'education_program_id'
+// groups и files M:N
+db.groupModel.belongsToMany(db.fileModel, {
+    through: db.groupFileModel,
+    foreignKey: 'group_id'
+});
+db.fileModel.belongsToMany(db.groupModel, {
+    through: db.groupFileModel,
+    foreignKey: 'file_id' 
+});
+
+// file_types и files 1:M
+db.fileTypeModel.hasMany(db.fileModel, {
+    foreignKey: 'file_type_id' 
+});
+
+// users и files 1:M
+db.userModel.hasMany(db.fileModel, {
+    foreignKey: 'user_id' 
 });
 
 export default db;

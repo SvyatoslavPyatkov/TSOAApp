@@ -1,16 +1,16 @@
 export default (sequelize, Sequelize) => {
-    const learnerDocumentTypeModel = sequelize.define("learner_document_type", {
+    const jobModel = sequelize.define("job", {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false
         },
-        type: {
+        name: {
             type: Sequelize.STRING,
             allowNull: false
         }
     });
     
-    return learnerDocumentTypeModel;
+    return jobModel;
 };

@@ -1,20 +1,29 @@
 export default (sequelize, Sequelize) => {
-    const groupDocumentModel = sequelize.define("group_document", {
+    const userModel = sequelize.define("user", {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             allowNull: false
+            
         },
-        name: {
+        first_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
+        last_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
+        username: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        document_path: {
+        hashed_password: {
             type: Sequelize.STRING,
             allowNull: false
         }
     });
     
-    return groupDocumentModel;
+    return userModel;
 };

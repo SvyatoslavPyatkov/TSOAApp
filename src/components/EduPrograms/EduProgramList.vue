@@ -1,18 +1,29 @@
 <template>
+    <div class="col-md-6 navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto flex-column">
+                <li class="nav-item">
+                    <router-link to="/api/education_programs" class="nav-link">Программы обучения</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/api/education_programs/add" class="nav-link">Добавление программ обучения</router-link>
+                </li>
+              </ul>
+            </div>
     <div class="list row">
-        <div class="col-md-8">
+        <!-- <div class="col-md-8">
             <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search by education program"
-                v-model="education_program"/>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button"
-                    @click="searchEduProgram"
-                >
-                    Поиск
-                </button>
+                <input type="text" class="form-control" placeholder="Поиск по образовательной программе"
+                    v-model="education_program"/>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button"
+                        @click="searchEduProgram"
+                    >
+                        Поиск
+                    </button>
+                </div>
             </div>
-            </div>
-        </div>
+        </div> -->
+        
         <div class="col-md-6">
             <h4>Программы обучения</h4>
             <ul class="list-group">
@@ -26,35 +37,35 @@
                 </li>
             </ul>
     
-            <button class="m-3 btn btn-sm btn-danger" @click="removeAllEduPrograms">
+            <!-- <button class="m-3 btn btn-sm btn-danger" @click="removeAllEduPrograms">
                 Remove All
-            </button>
+            </button> -->
         </div>
         <div class="col-md-6">
             <div v-if="currentEduProgram">
-                <h4>EduProgram</h4>
+                <h4>Программа обучения</h4>
             <div>
-                <label><strong>Title:</strong></label> {{ currentEduProgram.education_program }}
+                <label><strong>Программа:</strong></label> {{ currentEduProgram.education_program }}
             </div>
             <div>
-                <label><strong>Description:</strong></label> {{ currentEduProgram.description }}
+                <label><strong>Продолжительность обучения:</strong></label> {{ currentEduProgram.training_duration }}
             </div>
-            <div>
-                <label><strong>Status:</strong></label> {{ currentEduProgram.published ? "Published" : "Pending" }}
-            </div>
+            <!-- <div>
+                <label><strong>Статус:</strong></label> {{ currentEduProgram.published ? "Published" : "Pending" }}
+            </div> -->
     
-            <router-link :to="'/education_programs/' + currentEduProgram.id" class="badge badge-warning">Edit</router-link>
+            <router-link :to="'/api/education_programs/' + currentEduProgram.id" class="badge badge-warning">Изменить</router-link>
             </div>
             <div v-else>
                 <br />
-                <p>Please click on a EduProgram...</p>
+                <p>Пожалуйста, нажмите на программу...</p>
             </div>
         </div>
     </div>
 </template>
   
 <script>
-    import EduProgramsDataService from "../services/EduProgramsDataService.js";
+    import EduProgramsDataService from "../../services/EduProgramsDataService.js";
   
     export default {
         name: "EduProgRecord-list",

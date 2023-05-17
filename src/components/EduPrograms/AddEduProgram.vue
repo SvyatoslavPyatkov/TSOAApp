@@ -24,18 +24,18 @@
             />
             </div>
     
-            <button @click="saveEduProgram" class="btn btn-success">Submit</button>
+            <button @click="saveEduProgram" class="btn btn-success">Сохранить</button>
         </div>
     
         <div v-else>
-            <h4>You submitted successfully!</h4>
-            <button class="btn btn-success" @click="newEduProgram">Add</button>
+            <h4>Программа обучения добавлена успешно</h4>
+            <button class="btn btn-success" @click="newEduProgram">Добавить</button>
         </div>
     </div>
 </template>
   
 <script>
-    import EduProgramsDataService from "../services/EduProgramsDataService.js";
+    import EduProgramsDataService from "../../services/EduProgramsDataService.js";
     
     export default {
         name: "add-EduProgRecord",

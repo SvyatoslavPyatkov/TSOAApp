@@ -1,20 +1,20 @@
 export default (sequelize, Sequelize) => {
-    const learnerDocumentModel = sequelize.define("learner_document", {
+    const fileModel = sequelize.define("file", {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false
         },
-        name: {
+        original_file_name: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        document_path: {
+        extension: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         }
     });
     
-    return learnerDocumentModel;
+    return fileModel;
 };

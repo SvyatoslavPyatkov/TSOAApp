@@ -5,17 +5,17 @@ const routes =  [
         path: "/",
         alias: "/api/education_programs",
         name: "EduPrograms",
-        component: () => import("./components/EduProgramList.vue")
+        component: () => import("./components/EduPrograms/EduProgramList.vue")
     },
     {
         path: "/api/education_programs/:id",
         name: "EduProgram-details",
-        component: () => import("./components/EduProgram.vue")
+        component: () => import("./components/EduPrograms/EduProgram.vue")
     },
     {
         path: "/api/education_programs/add",
         name: "AddEduProgram",
-        component: () => import("./components/AddEduProgram.vue")
+        component: () => import("./components/EduPrograms/AddEduProgram.vue")
     }
 ];
 

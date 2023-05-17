@@ -1,18 +1,14 @@
 export default (sequelize, Sequelize) => {
     const groupModel = sequelize.define("group", {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
             primaryKey: true,
             allowNull: false
         },
-        enrollment_date: {
-            type: Sequelize.DATEONLY,
+        name: {
+            type: Sequelize.STRING,
             allowNull: false
-        },
-        expulsion_date: {
-            type: Sequelize.DATEONLY,
-            allowNull: true
         }
     });
     

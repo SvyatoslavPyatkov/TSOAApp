@@ -15,13 +15,13 @@
                 />
             </div>
     
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label><strong>Статус:</strong></label>
                 {{ currentEduProgram.published ? "Published" : "Pending" }}
-            </div>
+            </div> -->
         </form>
     
-        <button class="badge badge-primary mr-2"
+        <!-- <button class="badge badge-primary mr-2"
             v-if="currentEduProgram.published"
             @click="updatePublished(false)"
         >
@@ -31,7 +31,7 @@
             @click="updatePublished(true)"
         >
             Publish
-        </button>
+        </button> -->
     
         <button class="badge badge-danger mr-2"
             @click="deleteEduProgram"
@@ -49,12 +49,12 @@
   
         <div v-else>
             <br />
-            <p>Please click on a EduProgram...</p>
+            <p>Пожалуйста, нажмите на программу...</p>
         </div>
   </template>
   
 <script>
-    import EduProgramsDataService from "../services/EduProgramsDataService.js";
+    import EduProgramsDataService from "../../services/EduProgramsDataService.js";
     
     export default {
         name: "EduProgRecord",
@@ -99,7 +99,7 @@
                 EduProgramsDataService.update(this.currentEduProgram.id, this.currentEduProgram)
                 .then(response => {
                     console.log(response.data);
-                    this.message = 'The education program was updated successfully!';
+                    this.message = 'Образовательная программа была успешно обновлена';
                 })
                 .catch(e => {
                     console.log(e);
