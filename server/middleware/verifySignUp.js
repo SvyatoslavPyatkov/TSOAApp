@@ -1,8 +1,8 @@
 import db from '../models/index.js';
 
-checkDuplicatedb.Username = (req, res) => {
+export const checkDuplicateUsername = (req, res) => {
     // db.Username
-    db.user.findOne({
+    db.userModel.findOne({
         where: {
             username: req.body.username
         }
