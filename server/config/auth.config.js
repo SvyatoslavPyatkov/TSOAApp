@@ -1,3 +1,1 @@
-const secret = "someword";
-
-export default secret;
+export const secret = "someword";

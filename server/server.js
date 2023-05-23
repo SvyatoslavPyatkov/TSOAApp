@@ -5,9 +5,9 @@ import routerEduProgram from './routers/educationPrograms/education_program.rout
 import routerGroup from './routers/groups/group.routes.js';
 import routerLearner from './routers/learners/learner.routes.js';
 import routerPassport from './routers/learners/passport.routes.js';
-import routerAuth from './routers/auth/auth.routes.js';
-import routerUser from './routers/auth/user.routes.js';
+// import routerUser from './routers/auth/user.routes.js';
 
+import { router as routerAuth} from './routers/auth/auth.routes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -27,8 +27,9 @@ routerEduProgram(app);
 routerGroup(app);
 routerLearner(app);
 routerPassport(app);
-routerAuth(app);
-routerUser(app);
+// routerUser(app);
+
+app.use('/api/auth', routerAuth);
 
 // forceBool = true - включить пересоздание таблиц, пустой аргумент - false
 db.sequelize.sync({force: Boolean(process.argv[2])}).then(()=>{
