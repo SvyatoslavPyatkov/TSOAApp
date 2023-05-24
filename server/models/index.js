@@ -51,12 +51,18 @@ db.userModel = userModel(sequelize, Sequelize);
 //passports и learners 1:M
 db.passportModel.hasMany(db.learnerModel, {
     foreignKey: 'passport_id'
-})
+});
+db.learnerModel.belongsTo(db.passportModel, {
+    foreignKey: 'passport_id'
+});
 
 //jobs и learners 1:M
 db.jobModel.hasMany(db.learnerModel, {
     foreignKey: 'job_id'
-})
+});
+db.learnerModel.belongsTo(db.jobModel, {
+    foreignKey: 'job_id'
+});
 
 // learners и files M:N
 db.learnerModel.belongsToMany(db.fileModel, {
@@ -71,15 +77,24 @@ db.fileModel.belongsToMany(db.learnerModel, {
 // groups и learners 1:M
 db.groupModel.hasMany(db.learnerModel, {
     foreignKey: 'group_id'
+});
+db.learnerModel.belongsTo(db.groupModel, {
+    foreignKey: 'group_id'
 })
 
 // education_programs и groups 1:M
 db.eduProgramModel.hasMany(db.groupModel, {
     foreignKey: 'education_program_id'
 });
+db.groupModel.belongsTo(db.eduProgramModel, {
+    foreignKey: 'education_program_id'
+});
 
 // education_forms и groups 1:M
 db.eduFormModel.hasMany(db.eduProgramModel, {
+    foreignKey: 'education_form_id'
+});
+db.eduProgramModel.belongsTo(db.eduFormModel, {
     foreignKey: 'education_form_id'
 });
 

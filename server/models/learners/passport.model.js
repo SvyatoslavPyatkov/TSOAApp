@@ -27,7 +27,7 @@ export default (sequelize, Sequelize) => {
             allowNull: false
         },
         issued_by: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             allowNull: false
         },
         issued_date: {

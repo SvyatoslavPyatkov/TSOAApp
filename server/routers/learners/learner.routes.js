@@ -1,103 +1,23 @@
 import express from 'express';
-import db from '../../models/index.js';
+export const router = express.Router();
+import controller from '../../controllers/learners/learner.controller.js';
+import file_controller from '../../controllers/learners/learner_file.controller.js';
+import authMidleware from '../../middleware/auth.midleware.js';
 
-export default function(app) {
-    
-    const routerLearner = express.Router();
+// router.get('/learners', authMidleware, controller.getLearners);
+// router.post('/learners', authMidleware, controller.createLearner);
+// router.get('/learners/:id', authMidleware, controller.getLearnerById);
+// router.put('/learners/:id', authMidleware, controller.updateLearnerById);
+// router.delete('/learners/:id', authMidleware, controller.deleteLearnerById);
+// router.post('/learners/search', authMidleware, controller.searchLearner);
+// router.get('/learners/:id/documents', authMidleware, controller.getLearnerDocuments);
+// router.post('/learners/:id/documents', authMidleware, controller.createLearnerDocument);
 
-    routerLearner.get('/', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*');
-        res.json(await db.learnerModel.findAll({raw: true}));
-    });
-        
-    routerLearner.post('/', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*');
-        (async function() {
-            try {
-                await db.learnerModel.create({
-                    surname: req.body.surname,
-                    name: req.body.name,
-                    patronymic: req.body.patronymic,
-                    phone: req.body.phone,
-                    birth_date: req.body.birth_date,
-                    email: req.body.email,
-                    address: req.body.address,
-                    employment_place: req.body.employment_place,
-                    working_position: req.body.working_position,
-                    work_phone: req.body.work_phone,
-                    work_record: req.body.work_record,
-                    work_record_on_position: req.body.work_record_on_position,
-                    SNILS: req.body.SNILS,
-                    INN: req.body.INN,
-                    gender_id: req.body.gender_id,
-                    group_id: req.body.group_id
-                });
-                res.json({state: 'success'});
-            } 
-            catch (err) {
-                console.log(err);
-                res.json({state: 'recording error'});
-            }
-        })();
-    });
-
-    routerLearner.get('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*')
-        res.json(await db.learnerModel.findByPk(req.params["id"]));
-    });
-
-    routerLearner.put('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*');
-        (async function() {
-            try {
-                await db.learnerModel.update({ 
-                    surname: req.body.surname,
-                    name: req.body.name,
-                    patronymic: req.body.patronymic,
-                    phone: req.body.phone,
-                    birth_date: req.body.birth_date,
-                    email: req.body.email,
-                    address: req.body.address,
-                    employment_place: req.body.employment_place,
-                    working_position: req.body.working_position,
-                    work_phone: req.body.work_phone,
-                    work_record: req.body.work_record,
-                    work_record_on_position: req.body.work_record_on_position,
-                    SNILS: req.body.SNILS,
-                    INN: req.body.INN,
-                    gender_id: req.body.gender_id,
-                    group_id: req.body.group_id
-                },{
-                    where: {
-                        id: req.params["id"]
-                    }
-                });
-                res.json({state: 'updated'});
-            } 
-            catch (err) {
-                console.log(err);
-                res.json({state: 'edit error'});
-            }
-        })();
-    });
-
-    routerLearner.delete('/:id', async function(req, res) {
-        res.set('Access-Control-Allow-Origin', '*');
-        (async function() {
-            try {
-                await db.learnerModel.destroy({
-                    where: {
-                        id: req.params["id"]
-                    }
-                });
-                res.json({state: 'deleted'});
-            } 
-            catch (err) {
-                console.log(err);
-                res.json({state: 'delete error'});
-            }
-        })();
-    });
-    
-    app.use('/api/learners', routerLearner);
-};
+router.get('/learners', controller.getLearners);
+router.post('/learners', controller.createLearner);
+router.get('/learners/:id', controller.getLearnerById);
+router.put('/learners/:id', controller.updateLearnerById);
+router.delete('/learners/:id', controller.deleteLearnerById);
+router.post('/learners/search', controller.searchLearner);
+router.get('/learners/:id/documents', file_controller.getLearnerDocuments);
+router.post('/learners/:id/documents', file_controller.createLearnerDocument);
