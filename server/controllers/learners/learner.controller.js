@@ -1,4 +1,6 @@
 import db from '../../models/index.js';
+import { LEARNERS_PAGE_SIZE, SEARCH_LEARNERS_LIMIT } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
@@ -6,7 +8,21 @@ const col = db.Sequelize.col;
 class LearnerController {
     async getLearners(req, res) {
         try {
-            const learners = await db.learnerModel.findAll({raw: true});
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, LEARNERS_PAGE_SIZE);
+
+            const learners = await db.learnerModel.findAndCountAll({
+                limit, 
+                offset,
+                include: [{
+                    model: db.passportModel
+                }, {
+                    model: db.jobModel
+                }, {
+                    model: db.groupModel
+                }],
+                attributes: {exclude: ['passport_id', 'job_id', 'group_id']}
+            });
 
             return res.status(200).json(learners);
         } catch (err) {
@@ -62,7 +78,16 @@ class LearnerController {
 
     async getLearnerById(req, res) {
         try {
-            const learner = await db.learnerModel.findByPk(req.params["id"]);
+            const learner = await db.learnerModel.findByPk(req.params["id"], {
+                include: [{
+                    model: db.passportModel
+                }, {
+                    model: db.jobModel
+                }, {
+                    model: db.groupModel
+                }],
+                attributes: {exclude: ['passport_id', 'job_id', 'group_id']}
+            });
             return res.status(200).json(learner);
         } catch (err) {
             console.log(err);
@@ -120,12 +145,13 @@ class LearnerController {
 
     async searchLearner(req, res) {
         try {
-            const { 
-                text: text
-            } = req.query;
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, SEARCH_LEARNERS_LIMIT);
+            const { text: text } = req.query;
 
-            const learners = await db.learnerModel.findAll({
-                raw: true,
+            const learners = await db.learnerModel.findAndCountAll({
+                limit, 
+                offset,
                 include: {
                     model: db.passportModel,
                     where: {
@@ -142,16 +168,6 @@ class LearnerController {
                         )
                     }
                 }
-                // where: {
-                //     [Op.or]: {
-                //         phone_number: { [Op.like]: phone_number + '%' },
-                //         email: { [Op.like]: email + '%' },
-                //         address: { [Op.like]: '%' + address + '%' },
-                //         SNILS: { [Op.like]: SNILS + '%' },
-                //         INN: { [Op.like]: INN + '%' }
-                //     }
-                // }
-                // limit: 10
             });     
 
             return res.status(200).json(learners);

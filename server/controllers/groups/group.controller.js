@@ -1,4 +1,6 @@
 import db from '../../models/index.js';
+import { GROUPS_PAGE_SIZE } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
@@ -7,7 +9,21 @@ class GroupController {
     
     async getGroups(req, res) {
         try {
-            const groups = await db.groupModel.findAll({raw: true});
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, GROUPS_PAGE_SIZE);
+
+            const groups = await db.groupModel.findAndCountAll({
+                limit, 
+                offset,
+                include: {
+                    model: db.eduProgramModel,
+                    include: {
+                        model: db.eduFormModel
+                    },
+                    attributes: {exclude: ['education_form_id']}
+                },
+                attributes: {exclude: ['education_program_id']}
+            });
 
             return res.status(200).json(groups);
         } catch (err) {
@@ -91,9 +107,7 @@ class GroupController {
 
     async searchGroup(req, res) {
         try {
-            const { 
-                text: text
-            } = req.query;
+            const { text: text } = req.query;
 
             const group = await db.groupModel.findAll({
                 raw: true,

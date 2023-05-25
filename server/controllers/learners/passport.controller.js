@@ -1,4 +1,6 @@
 import db from '../../models/index.js';
+import { PASSPORTS_PAGE_SIZE, SEARCH_PASSPORT_PAGINATE } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
@@ -7,7 +9,14 @@ const where = db.Sequelize.where;
 class PassportController {
     async getPassports(req, res) {
         try {
-            const passports = await db.passportModel.findAll({raw: true});
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, PASSPORTS_PAGE_SIZE);
+
+            const passports = await db.passportModel.findAndCountAll({
+                raw: true,
+                limit, 
+                offset
+            });
             // res.set('Access-Control-Allow-Origin', '*');
             return res.status(200).json(passports);
         } catch (err) {
@@ -131,12 +140,14 @@ class PassportController {
 
     async searchPassport(req, res) {
         try {
-            const {
-                text: text
-            } = req.body;
+            const { text: text } = req.body;
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, SEARCH_PASSPORT_PAGINATE);
 
-            const passports = await db.passportModel.findAll({
+            const passports = await db.passportModel.findAndCountAll({
                 raw: true,
+                limit, 
+                offset,
                 where: {
                     [Op.or]: {
                         FIO: where(
@@ -170,10 +181,7 @@ class PassportController {
 
     async searchPassportBySeriesAndNumber(req, res) {
         try {
-            const {
-                series: series,
-                number: number
-            } = req.query;
+            const { series: series, number: number,  } = req.query;
 
             const passports = await db.passportModel.findAll({
                 raw: true,

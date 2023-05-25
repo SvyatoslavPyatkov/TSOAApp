@@ -1,4 +1,6 @@
 import db from '../../models/index.js';
+import { FILES_PAGE_SIZE } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
@@ -7,7 +9,12 @@ class LearnerFileController {
 
     async getLearnerDocuments(req, res) {
         try {
-            const files = await db.fileModel.findAll({
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, FILES_PAGE_SIZE);
+
+            const files = await db.fileModel.findAndCountAll({
+                limit, 
+                offset,
                 include: [{
                     model: db.learnerModel,
                     through: {

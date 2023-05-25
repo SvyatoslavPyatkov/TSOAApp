@@ -1,10 +1,15 @@
 import db from '../../models/index.js';
+import { EDUCATION_PROGRAMS_PAGE_SIZE } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 
 class EduFormController {
     async getForms(req, res) {
         try {
-            const forms = await db.eduFormModel.findAll({raw: true});
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, EDUCATION_PROGRAMS_PAGE_SIZE);
+
+            const forms = await db.eduFormModel.findAndCountAll({ limit, offset });
 
             return res.status(200).json(forms);
         } catch (err) {
@@ -76,9 +81,12 @@ class EduFormController {
     async searchForm(req, res) {
         try {
             const { name } = req.query;
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, EDUCATION_PROGRAMS_PAGE_SIZE);
 
-            const forms = await db.eduFormModel.findAll({
-                raw: true,
+            const forms = await db.eduFormModel.findAndCountAll({
+                limit, 
+                offset,
                 where: {
                     name: {
                         [Op.like]: '%' + name + '%'
@@ -96,7 +104,12 @@ class EduFormController {
 
     async searchProgramByForm(req, res) {
         try {
-            const programs = await db.eduProgramModel.findAll({
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, EDUCATION_PROGRAMS_PAGE_SIZE);
+
+            const programs = await db.eduProgramModel.findAndCountAll({
+                limit, 
+                offset,
                 include: {
                     where: {
                         id: req.params["id"]

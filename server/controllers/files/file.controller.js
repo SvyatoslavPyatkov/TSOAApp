@@ -1,6 +1,8 @@
 import db from '../../models/index.js';
 const Op = db.Sequelize.Op;
 import fs from 'fs';
+import { SEARCH_TYPES_LIMIT, SEARCH_TYPES_PAGE_SIZE } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 
 import { __dirname } from '../../server.js';
 import uploadMiddleware from '../../middleware/upload.middleware.js';
@@ -8,7 +10,13 @@ import uploadMiddleware from '../../middleware/upload.middleware.js';
 class FileController {
     async getFileTypes(req, res) {
         try {
-            const fileTypes = await db.fileTypeModel.findAll({raw: true});
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, SEARCH_TYPES_LIMIT);
+
+            const fileTypes = await db.fileTypeModel.findAndCountAll({
+                limit, 
+                offset
+            });
 
             return res.status(200).json(fileTypes);
         } catch (err) {
@@ -70,9 +78,12 @@ class FileController {
     async searchFileType(req, res) {
         try {
             const { name } = req.query;
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, SEARCH_TYPES_PAGE_SIZE);
 
-            const forms = await db.fileTypeModel.findAll({
-                raw: true,
+            const forms = await db.fileTypeModel.findAndCountAll({
+                limit, 
+                offset,
                 where: {
                     name: {
                         [Op.like]: '%' + name + '%'
@@ -176,7 +187,7 @@ class FileController {
                 include: [{
                     model: db.fileModel,
                     through: {
-                        attributes: [/* list the wanted attributes here */]
+                        attributes: []
                     },
                     include: {
                         model: db.fileTypeModel

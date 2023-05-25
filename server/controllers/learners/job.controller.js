@@ -1,4 +1,6 @@
 import db from '../../models/index.js';
+import { JOBS_PAGE_SIZE, SEARCH_JOBS_LIMIT } from '../../config/pagination.config.js';
+import { getPagination } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
@@ -6,7 +8,13 @@ const col = db.Sequelize.col;
 class JobController {
     async getJobs(req, res) {
         try {
-            const job = await db.jobModel.findAll({raw: true});
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, JOBS_PAGE_SIZE);
+
+            const job = await db.jobModel.findAndCountAll({
+                limit, 
+                offset
+            });
 
             return res.status(200).json(job);
         } catch (err) {
@@ -17,13 +25,9 @@ class JobController {
 
     async createJob(req, res) {
         try {
-            const { 
-                name
-            } = req.body;
+            const { name } = req.body;
             const candidate = await db.jobModel.findOne({ 
-                where: { 
-                    name: name
-                } 
+                where: { name: name } 
             });
             if (candidate) {
                 return res.status(400).json({ message: "Данная форма обучения уже существует" })
@@ -85,16 +89,16 @@ class JobController {
 
     async searchJob(req, res) {
         try {
-            const { 
-                text: text
-            } = req.query;
+            const { text: text } = req.query;
+            const { page, size } = req.query;
+            const { limit, offset } = getPagination(page, SEARCH_JOBS_LIMIT);
 
-            const job = await db.jobModel.findAll({
-                raw: true,
+            const job = await db.jobModel.findAndCountAll({
+                limit, 
+                offset,
                 where: {
                     name: { [Op.like]: '%' + text + '%' }
                 }
-                // limit: 10
             });     
 
             return res.status(200).json(job);

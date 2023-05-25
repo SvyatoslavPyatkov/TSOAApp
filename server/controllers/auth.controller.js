@@ -80,7 +80,7 @@ class authController {
                 const accessToken = generateAccessToken(user.id);
                 const refreshToken = generateRefreshToken(user.id);
                 res.cookie("refreshToken", refreshToken, {maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true});
-                return res.json({message: "Авторизация прошла успешно", accessToken, refreshToken});
+                return res.json({accessToken, refreshToken});
             });
         } catch (err) {
             res.status(400).json({ message: "Ошибка авторизации" })
