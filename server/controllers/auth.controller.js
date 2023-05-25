@@ -120,8 +120,10 @@ class authController {
 
     async getUsers(req, res) {
         try {
-            const users = await db.userModel.findAll();
-            res.json({ message: users });
+            const users = await db.userModel.findAll({
+                attributes: {exclude: ['hashed_password']}
+            });
+            res.json(users);
         } catch (err) {
             res.status(400).json({ message: "Ошибка получения пользователей" })
         }
