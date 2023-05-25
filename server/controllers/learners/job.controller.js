@@ -87,7 +87,7 @@ class JobController {
         try {
             const { 
                 text: text
-            } = req.body;
+            } = req.query;
 
             const job = await db.jobModel.findAll({
                 raw: true,

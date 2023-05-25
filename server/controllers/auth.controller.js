@@ -1,17 +1,17 @@
 import db from '../models/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } from '../config/auth.config.js';
+import { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, JWT_ACCESS_EXPIRE, JWT_REFRESH_EXPIRE } from '../config/auth.config.js';
 import { validationResult } from 'express-validator';
 
 const generateAccessToken = (id) => {
     const payload = { id }
-    return jwt.sign(payload, JWT_ACCESS_SECRET, { expiresIn: '30m' });
+    return jwt.sign(payload, JWT_ACCESS_SECRET, { expiresIn: JWT_ACCESS_EXPIRE });
 }
 
 const generateRefreshToken = (id) => {
     const payload = { id }
-    return jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '24h' });
+    return jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: JWT_REFRESH_EXPIRE });
 }
 
 const validateAccessToken = (token) => {
@@ -129,60 +129,3 @@ class authController {
 }
 
 export default new authController;
-
-// export function signup(req, res) {
-//     // Сохранить db.userModel в базе данных
-//     db.userModel.create({
-//         first_name: req.body.first_name,
-//         last_name: req.body.last_name,
-//         username: req.body.username,
-//         hashed_password: bcrypt.hashSync(req.body.hashed_password, 8)
-//     })
-//     .then(
-//         res.send({ message: "Пользователь был успешно зарегистрирован." })
-//     )
-//     .catch(err => {
-//         res.status(500).send({ message: err.message });
-//     });
-// };
-  
-// export function signin(req, res) {
-//     db.userModel.findOne({
-//         where: {
-//             username: req.body.username
-//         }
-//     })
-//     .then(user => {
-//         if (!user) {
-//             return res.status(404).send({ message: "Пользователь не найден." });
-//         }
-  
-//         var passwordIsValid = bcrypt.compareSync(
-//             req.body.hashed_password,
-//             user.hashed_password
-//         );
-  
-//         if (!passwordIsValid) {
-//             return res.status(401).send({
-//                 accessToken: null,
-//                 message: "Неверный пароль!"
-//             });
-//         }
-  
-//         var token = jwt.sign({ id: user.id }, config.JWT_ACCESS_SECRET, {
-//             expiresIn: 86400 // Действие токена - 24 часа
-//         });
-
-//         res.status(200).send({
-//             id: user.id,
-//             first_name: user.first_name,
-//             last_name: user.last_name,
-//             username: user.username,
-//             accessToken: token
-//         });
-//     })
-//     .catch(err => {
-//         res.status(500).send({ message: err.message });
-//     });
-// };
-

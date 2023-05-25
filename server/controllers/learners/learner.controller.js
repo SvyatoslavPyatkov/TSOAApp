@@ -40,7 +40,7 @@ class LearnerController {
                 } 
             });
             if (candidate) {
-                return res.status(400).json({ message: "Данная форма обучения уже существует" })
+                return res.status(400).json({ message: "Данная запись слушателя уже существует" })
             }
 
             const learner = await db.learnerModel.create({
@@ -122,7 +122,7 @@ class LearnerController {
         try {
             const { 
                 text: text
-            } = req.body;
+            } = req.query;
 
             const learners = await db.learnerModel.findAll({
                 raw: true,

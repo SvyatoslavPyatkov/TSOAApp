@@ -75,7 +75,7 @@ class EduFormController {
 
     async searchForm(req, res) {
         try {
-            const { name } = req.body;
+            const { name } = req.query;
 
             const forms = await db.eduFormModel.findAll({
                 raw: true,

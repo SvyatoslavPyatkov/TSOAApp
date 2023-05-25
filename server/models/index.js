@@ -21,7 +21,9 @@ import userModel from './authorization/user.model.js';
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     dialect: dbConfig.dialect,
     host: dbConfig.HOST,
-    define: dbConfig.define
+    port: dbConfig.PORT,
+    define: dbConfig.define,
+    operatorsAliases: false
 });
 
 const db = {};
@@ -112,6 +114,10 @@ db.fileModel.belongsToMany(db.groupModel, {
 db.fileTypeModel.hasMany(db.fileModel, {
     foreignKey: 'file_type_id' 
 });
+db.fileModel.belongsTo(db.fileTypeModel, {
+    foreignKey: 'file_type_id' 
+});
+
 
 // users и files 1:M
 db.userModel.hasMany(db.fileModel, {

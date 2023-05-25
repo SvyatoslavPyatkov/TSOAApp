@@ -173,7 +173,7 @@ class PassportController {
             const {
                 series: series,
                 number: number
-            } = req.body;
+            } = req.query;
 
             const passports = await db.passportModel.findAll({
                 raw: true,

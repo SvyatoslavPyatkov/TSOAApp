@@ -4,6 +4,7 @@ const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
 
 class GroupController {
+    
     async getGroups(req, res) {
         try {
             const groups = await db.groupModel.findAll({raw: true});
@@ -92,7 +93,7 @@ class GroupController {
         try {
             const { 
                 text: text
-            } = req.body;
+            } = req.query;
 
             const group = await db.groupModel.findAll({
                 raw: true,

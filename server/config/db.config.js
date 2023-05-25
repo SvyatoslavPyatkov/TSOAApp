@@ -1,9 +1,10 @@
 const dbConfig = {
     HOST: "localhost",
-    USER: "root",
-    PASSWORD: "root",
+    PORT: "5433",
+    USER: "postgres",
+    PASSWORD: "postgres",
     DB: "db_learner_records",
-    dialect: "mysql",
+    dialect: "postgres",
     define: {
         timestamps: false
     }
