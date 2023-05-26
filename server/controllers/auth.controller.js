@@ -123,6 +123,7 @@ class authController {
             const users = await db.userModel.findAll({
                 attributes: {exclude: ['hashed_password']}
             });
+            res.set('Access-Control-Allow-Origin', '*');
             res.json(users);
         } catch (err) {
             res.status(400).json({ message: "Ошибка получения пользователей" })

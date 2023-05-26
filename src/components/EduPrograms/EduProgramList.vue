@@ -1,132 +1,172 @@
 <template>
-    <div class="col-md-6 navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto flex-column">
-                <li class="nav-item">
-                    <router-link to="/api/education_programs" class="nav-link">Программы обучения</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link to="/api/education_programs/add" class="nav-link">Добавление программ обучения</router-link>
-                </li>
-              </ul>
-            </div>
     <div class="list row">
-        <!-- <div class="col-md-8">
+        <div class="col-md-8">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Поиск по образовательной программе"
-                    v-model="education_program"/>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button"
-                        @click="searchEduProgram"
-                    >
-                        Поиск
-                    </button>
-                </div>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Search by title"
+                v-model="searchProgram"
+            />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button"
+                    @click="page = 1; retrieveEduPrograms();">
+                    Search
+                </button>
             </div>
-        </div> -->
-        
-        <div class="col-md-6">
-            <h4>Программы обучения</h4>
-            <ul class="list-group">
-                <li class="list-group-item"
-                    :class="{ active: index == currentIndex }"
-                    v-for="(education_programs, index) in education_programs"
-                    :key="index"
-                    @click="setEduProgram(education_programs, index)"
-                >
-                    {{ education_programs.education_program }}
-                </li>
-            </ul>
-    
-            <!-- <button class="m-3 btn btn-sm btn-danger" @click="removeAllEduPrograms">
-                Remove All
-            </button> -->
+            </div>
         </div>
+  
+      <div class="col-md-12">
+        <div class="mb-3">
+          Items per Page:
+          <select v-model="pageSize" @change="handlePageSizeChange($event)">
+            <option v-for="size in pageSizes" :key="size" :value="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+  
+        <b-pagination
+          v-model="page"
+          :total-rows="count"
+          :per-page="pageSize"
+          prev-text="Prev"
+          next-text="Next"
+          @change="handlePageChange"
+        ></b-pagination>
+      </div>
+  
+      <div class="col-md-6">
+        <h4>EduPrograms List</h4>
+        <ul class="list-group" id="programs-list">
+          <li
+            class="list-group-item"
+            :class="{ active: index == currentIndex }"
+            v-for="(program, index) in rows"
+            :key="index"
+            @click="setActiveEduProgram(program, index)"
+          >
+            {{ program.text }}
+          </li>
+        </ul>
+  
+        <button class="m-3 btn btn-sm btn-danger" @click="removeAllEduPrograms">
+          Remove All
+        </button>
+      </div>
+  
         <div class="col-md-6">
             <div v-if="currentEduProgram">
-                <h4>Программа обучения</h4>
-            <div>
-                <label><strong>Программа:</strong></label> {{ currentEduProgram.education_program }}
-            </div>
-            <div>
-                <label><strong>Продолжительность обучения:</strong></label> {{ currentEduProgram.training_duration }}
-            </div>
-            <!-- <div>
-                <label><strong>Статус:</strong></label> {{ currentEduProgram.published ? "Published" : "Pending" }}
-            </div> -->
-    
-            <router-link :to="'/api/education_programs/' + currentEduProgram.id" class="badge badge-warning">Изменить</router-link>
+                <h4>EduProgram</h4>
+                <div>
+                    <label><strong>Name:</strong></label> {{ currentEduProgram.text }}
+                </div>
+                <div>
+                    <label><strong>Description:</strong></label>
+                    {{ currentEduProgram.description }}
+                </div>
+                <div>
+                    <label><strong>Status:</strong></label>
+                    {{ currentEduProgram.published ? "Published" : "Pending" }}
+                </div>
+        
+                <a class="badge badge-warning" :href="'/programs/' + currentEduProgram.id">
+                    Edit
+                </a>
             </div>
             <div v-else>
                 <br />
-                <p>Пожалуйста, нажмите на программу...</p>
+                <p>Please click on a EduProgram...</p>
             </div>
         </div>
     </div>
-</template>
+  </template>
   
-<script>
-    import EduProgramsDataService from "../../services/EduProgramsDataService.js";
+  <script>
+  import EduProgramDataService from "../../services/EduProgramsDataService.js";
   
-    export default {
-        name: "EduProgRecord-list",
-        data() {
+  export default {
+    name: "programs-list",
+    data() {
         return {
-            education_programs: [],
+            rows: [],
             currentEduProgram: null,
             currentIndex: -1,
-            education_program: ""
+            searchProgram: "",
+    
+            page: 1,
+            count: 0,
+            pageSize: 9,
+    
+            pageSizes: [3, 6, 9],
         };
-        },
-        methods: {
-            retrieveEduPrograms() {
-                EduProgramsDataService.getAll()
-                .then(response => {
-                    this.education_programs = response.data;
-                    console.log(response.data);
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-            },
-        
-            refreshList() {
-                this.retrieveEduPrograms();
-                this.currentEduProgram = null;
-                this.currentIndex = -1;
-            },
-        
-            setEduProgram(education_programs, index) {
-                this.currentEduProgram = education_programs;
-                this.currentIndex = education_programs ? index : -1;
-            },
-        
-            removeAllEduPrograms() {
-                EduProgramsDataService.deleteAll()
-                .then(response => {
-                    console.log(response.data);
-                    this.refreshList();
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-            },
-            
-            searchEduProgram() {
-                EduProgramsDataService.findByTitle(this.education_program)
-                .then(response => {
-                    this.education_programs = response.data;
-                    this.setEduProgram(null);
-                    console.log(response.data);
-                })
-                .catch(e => {
-                    console.log(e);
-                });
+    },
+    methods: {
+        getRequestParams(searchProgram, page, pageSize) {
+            let params = {};
+    
+            if (searchProgram) {
+            params["text"] = searchProgram;
             }
+    
+            if (page) {
+            params["page"] = page - 1;
+            }
+    
+            if (pageSize) {
+            params["size"] = pageSize;
+            }
+    
+            return params;
         },
-        mounted() {
-            this.retrieveEduPrograms();
-        }
-    };
+  
+    retrieveEduPrograms() {
+        const params = this.getRequestParams(
+            this.searchProgram,
+            this.page,
+            this.pageSize
+        );
+  
+        EduProgramDataService.getAll(params)
+        .then((response) => {
+            const { rows, totalItems } = response.data;
+            this.rows = rows;
+            this.count = totalItems;
+  
+            console.log(response.data);
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+    },
+  
+    handlePageChange(value) {
+        this.page = value;
+        this.retrieveEduPrograms();
+    },
+  
+    handlePageSizeChange(event) {
+        this.pageSize = event.target.value;
+        this.page = 1;
+        this.retrieveEduPrograms();
+    },
+  
+    refreshList() {
+        this.retrieveEduPrograms();
+        this.currentEduProgram = null;
+        this.currentIndex = -1;
+    },
+  
+    setActiveEduProgram(program, index) {
+        this.currentEduProgram = program;
+        this.currentIndex = index;
+    }
+    },
+    mounted() {
+      this.retrieveEduPrograms();
+    },
+  };
 </script>
   
 <style>

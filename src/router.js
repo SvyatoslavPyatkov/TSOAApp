@@ -1,27 +1,26 @@
-import { createWebHistory, createRouter } from "vue-router";
+import Vue from "vue";
+import Router from "vue-router";
 
-const routes =  [
+Vue.use(Router);
+
+export default new Router({
+  mode: "history",
+  routes: [
     {
-        path: "/",
-        alias: "/api/education_programs",
-        name: "EduPrograms",
-        component: () => import("./components/EduPrograms/EduProgramList.vue")
+      path: "/",
+      alias: "/programs",
+      name: "programs",
+      component: () => import("./components/EduPrograms/EduProgramList.vue")
     },
     {
-        path: "/api/education_programs/:id",
-        name: "EduProgram-details",
-        component: () => import("./components/EduPrograms/EduProgram.vue")
+      path: "/programs/:id",
+      name: "program-details",
+      component: () => import("./components/EduPrograms/EduProgram.vue")
     },
     {
-        path: "/api/education_programs/add",
-        name: "AddEduProgram",
-        component: () => import("./components/EduPrograms/AddEduProgram.vue")
+      path: "programs/add",
+      name: "programs-add",
+      component: () => import("./components/EduPrograms/AddEduProgram.vue")
     }
-];
-
-const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  ]
 });
-
-export default router;

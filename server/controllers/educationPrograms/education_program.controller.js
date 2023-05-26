@@ -1,6 +1,6 @@
 import db from '../../models/index.js';
 import { EDUCATION_PROGRAMS_PAGE_SIZE } from '../../config/pagination.config.js';
-import { getPagination } from '../../helpers/pagination.helper.js';
+import { getPagination, getPagingData } from '../../helpers/pagination.helper.js';
 const Op = db.Sequelize.Op;
 const fn = db.Sequelize.fn;
 const col = db.Sequelize.col;
@@ -18,8 +18,8 @@ class EduProgramController {
                 },
                 attributes: {exclude: ['education_form_id']}
             });
-
-            return res.status(200).json(eduProgram);
+            const response = getPagingData(eduProgram, page, limit);
+            return res.status(200).json(response);
         } catch (err) {
             console.log(err);
             return res.status(400).json({ message: "Ошибка получения данных", err });

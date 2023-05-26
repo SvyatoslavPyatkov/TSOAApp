@@ -1,32 +1,28 @@
 import http from "../http-common.js";
 
 class EduProgramsDataService {
-    getAll() {
-        return http.get("/api/education_programs/");
+    getAll(params) {
+        return http.get("/api/programs/", { params });
     }
 
     get(id) {
-        return http.get(`/api/education_programs/${id}`);
+        return http.get(`/api/programs/${id}`);
     }
     
     create(data) {
-        return http.post("/api/education_programs/", data);
+        return http.post("/api/programs/", data);
     }
     
     update(id, data) {
-        return http.put(`/api/education_programs/${id}`, data);
+        return http.put(`/api/programs/${id}`, data);
     }
     
     delete(id) {
-        return http.delete(`/api/education_programs/${id}`);
+        return http.delete(`/api/programs/${id}`);
     }
     
-    deleteAll() {
-        return http.delete(`/api/education_programs`);
-    }
-    
-    findByTitle(title) {
-        return http.get(`/api/education_programs?title=${title}`);
+    findByText(text) {
+        return http.get(`/api/programs?text=${text}`);
     }
 }
 

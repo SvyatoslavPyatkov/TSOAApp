@@ -11,4 +11,4 @@ router.post('/registration', [
 router.post('/login', controller.login);
 router.delete('/logout', controller.logout);
 router.post('/refresh', authMidleware, controller.refresh);
-router.get('/users', authMidleware, controller.getUsers);
+router.get('/users', controller.getUsers);

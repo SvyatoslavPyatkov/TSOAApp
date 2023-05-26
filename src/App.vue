@@ -14,10 +14,6 @@
                 </li>
             </div>
         </nav>
-
-        <div class="">
-            <router-view />
-        </div>
     </div>
 </template>
 
